@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Tracker</title>
+</head>
+<body>
+    <h1>Portfolio Tracker</h1>
+    <a href="/add_stock">Add Stock</a>
+    <br><br>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Ticker</th>
+            <th>Quantity</th>
+            <th>Buy Price</th>
+            <th>Current Price</th>
+            <th>Total Value</th>
+            <th>Actions</th>
+        </tr>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{ stock[1] }}</td>
+            <td>{{ stock[2] }}</td>
+            <td>{{ stock[3] }}</td>
+            <td>{{ stock[4] }}</td>
+            <td>{{ stock[5] }}</td>
+            <td>{{ stock[3] | float * stock[5] |float }}</td>
+            <td><a href="/update_prices">Update Prices</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

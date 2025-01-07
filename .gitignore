@@ -1,0 +1,8 @@
+# Ignore AppData and other system files 
+# Ignore AppData and other system files
+AppData/
+.cache/
+.gradle/
+.eclipse/
+*.log
+*.tmp
