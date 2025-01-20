@@ -4,7 +4,7 @@ import sqlite3
 connection = sqlite3.connect('portfolio.db')
 cursor = connection.cursor()
 
-# Create the 'stocks' table
+# Create the 'stocks' table if it doesn't exist
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS stocks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS stocks (
 )
 ''')
 
-# Insert sample data
+# Insert sample data (optional)
 cursor.execute("INSERT INTO stocks (name, price) VALUES ('AAPL', 150.75)")
 cursor.execute("INSERT INTO stocks (name, price) VALUES ('GOOGL', 2800.50)")
 cursor.execute("INSERT INTO stocks (name, price) VALUES ('MSFT', 299.99)")

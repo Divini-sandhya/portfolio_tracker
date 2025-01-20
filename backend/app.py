@@ -4,29 +4,24 @@ from flask import Flask, render_template, redirect, request
 
 app = Flask(__name__)
 
-# Function to fetch real-time stock prices
-def get_stock_price(ticker):
-    try:
-        stock = yf.Ticker(ticker)
-        return stock.history(period="1d")['Close'].iloc[-1]  # Get the latest closing price
-    except Exception as e:
-        print(f"Error fetching price for {ticker}: {e}")
-        return None
-print(get_stock_price("AAPL"))
+def get_stocks_from_database():
+    # Connect to the SQLite database
+    connection = sqlite3.connect('portfolio.db')
+    cursor = connection.cursor()
+
+    # Fetch all stock records from the database
+    cursor.execute("SELECT * FROM stocks")
+    stocks = cursor.fetchall()
+
+    # Close the connection
+    connection.close()
+
+    return stocks
 
 @app.route('/')
 def home():
-    conn = sqlite3.connect('portfolio.db')
-    cursor = conn.cursor()
-    
-    # Fetch all stocks from the portfolio
-    cursor.execute("SELECT id, name, ticker, quantity, buy_price, current_price FROM stocks")
-    stocks = cursor.fetchall()
-    
-    conn.close()
-    
-    return render_template('home.html', stocks=stocks)
-
+    stocks = get_stocks_from_database()  # Fetch stocks from the database
+    return {'stocks': stocks}  # Return the stocks as a response
 @app.route('/update_prices')
 def update_prices():
     conn = sqlite3.connect('portfolio.db')

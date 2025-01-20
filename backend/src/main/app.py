@@ -1,32 +1,51 @@
 import yfinance as yf
 import sqlite3
-from flask import Flask, render_template, redirect, request
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-# Function to fetch real-time stock prices
-def get_stock_price(ticker):
+def get_stocks_from_database():
+    
     try:
-        stock = yf.Ticker(ticker)
-        return stock.history(period="1d")['Close'].iloc[-1]  # Get the latest closing price
-    except Exception as e:
-        print(f"Error fetching price for {ticker}: {e}")
-        return None
-print(get_stock_price("AAPL"))
+        # Connect to the SQLite database
+        connection = sqlite3.connect('portfolio.db')  # Ensure the path is correct
+        cursor = connection.cursor()
+
+        # Fetch all stocks from the 'stocks' table
+        cursor.execute("SELECT * FROM stocks")
+        rows = cursor.fetchall()
+        print(rows)
+
+        '''# Convert rows to list of dictionaries
+        stocks = []
+        for row in rows:
+            stock = {
+                "id": row[0],
+                "name": row[1],
+                "price": row[2]
+            }
+            stocks.append(stock)
+
+        # Close the connection'''
+        connection.close()
+
+        return stocks
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return []
+
 
 @app.route('/')
 def home():
-    conn = sqlite3.connect('portfolio.db')
-    cursor = conn.cursor()
-    
-    # Fetch all stocks from the portfolio
-    cursor.execute("SELECT id, name, ticker, quantity, buy_price, current_price FROM stocks")
-    stocks = cursor.fetchall()
-    
-    conn.close()
-    
-    return render_template('home.html', stocks=stocks)
+    try:
+        # Fetch stocks from the database
+        stocks = get_stocks_from_database()
 
+        # Return the stocks as JSON
+        return jsonify({"stocks": stocks})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/update_prices')
 def update_prices():
     conn = sqlite3.connect('portfolio.db')
@@ -69,5 +88,4 @@ def add_stock():
     return render_template('add_stock.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",
-port=5005)    
+    app.run(port=5005)    
