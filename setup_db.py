@@ -21,3 +21,4 @@ cursor.execute("INSERT INTO stocks (name, price) VALUES ('MSFT', 299.99)")
 # Commit changes and close connection
 connection.commit()
 connection.close()
+print("Database and table initialized successfully.")
