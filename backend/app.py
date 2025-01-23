@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 def get_stocks_from_database():
     # Connect to the SQLite database
-    connection = sqlite3.connect('portfolio.db')
+    connection = sqlite3.connect('setup_db')
     cursor = connection.cursor()
 
     # Fetch all stock records from the database
