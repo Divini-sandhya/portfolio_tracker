@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html>
 <head>
     <title>Portfolio Tracker</title>
@@ -6,36 +6,33 @@
 <body>
     <h1>Portfolio Tracker</h1>
     <a href="/add">Add Stock</a>
-    <table border="1">
-        <tr>
-            <th>Name</th>
-            <th>Ticker</th>
-            <th>Quantity</th>
-            <th>Buy Price</th>
-            <th>Current Price</th>
-            <th>Total Value</th>
-            <th>Actions</th>
-        </tr>
-        {% for stock in stocks %}
-        <tr>
-            <td>{{ stock.name }}</td>
-            <td>{{ stock.ticker }}</td>
-            <td>{{ stock.quantity }}</td>
-            <td>{{ stock.buy_price }}</td>
-            <td>{{ stock.current_price }}</td>
-            <td>{{ stock.quantity * stock.current_price }}</td>
-            <td>
-                <a href="/edit/{{ stock.id }}">Edit</a>
-                <a href="/delete/{{ stock.id }}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Current Price</th>
+                <th>Total Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.name }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.current_price }}</td>
+                <td>{{ stock.quantity * stock.current_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-    <a href="/update_prices">Update Prices</a>
+
+    <!-- Add the form for updating stock prices -->
+    <form method="POST" action="/update_prices" style="margin-top: 20px;">
+        <button type="submit">Update Stock Prices</button>
+    </form>
 </body>
 </html>
-
-
 
 
 

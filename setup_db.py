@@ -1,26 +1,24 @@
+# -- coding: utf-8 --
+
 import sqlite3
 
-def setup_db():
-    # Connect to the SQLite database
-    conn = sqlite3.connect('path/to/your/database.db')  # Use your actual database path
-    cursor = conn.cursor()
-    
-    # Create the 'stocks' table if it doesn't exist
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS stocks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            symbol TEXT NOT NULL,
-            quantity INTEGER NOT NULL,
-            price REAL NOT NULL
-        )
-    ''')
-    
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
+print("Starting database setup...")
 
-# Call this function when the app starts
-@app.before_first_request
-def initialize():
-    setup_db()
+# Connect to the database (will create the file if it doesn't exist)
+connection = sqlite3.connect('portfolio.db')
+cursor = connection.cursor()
+
+# Create the 'stocks' table if it doesn't already exist
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS stocks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    price REAL NOT NULL
+)
+''')
+
+connection.commit()
+connection.close()
+
+print("Database initialized successfully.")
